@@ -1547,8 +1547,9 @@ ReadController1:
   LDX #$08
 ReadController1Loop:
   LDA CONTROLLER_PORT1
-  LSR A              ; bit0 -> Carry
-  ROL p1_buttons     ; bit0 <- Carry
+  AND #%00000011     ; ignore bits other than controllers (D1 and D0)
+  CMP #$01           ; Set carry if and only if nonzero
+  ROL p1_buttons     ; Carry -> bit 0; but 7 -> Carry
   DEX
   BNE ReadController1Loop
   ; store what was newly pressed (not working)
@@ -1568,8 +1569,9 @@ ReadController2:
   LDX #$08
 ReadController2Loop:
   LDA CONTROLLER_PORT2
-  LSR A              ; bit0 -> Carry
-  ROL p2_buttons     ; bit0 <- Carry
+  AND #%00000011     ; ignore bits other than controllers (D1 and D0)
+  CMP #$01           ; Set carry if and only if nonzero
+  ROL p2_buttons     ; Carry -> bit 0; but 7 -> Carry
   DEX
   BNE ReadController2Loop
   ; store what was newly pressed (not working)
